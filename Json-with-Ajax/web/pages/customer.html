@@ -25,10 +25,10 @@
     <ul class="list-group list-group-horizontal text-danger justify-content-end font-weight-bold">
         <li class="list-group-item bg-white" id="lnkHome"><a href="../index.jsp">Home</a></li>
         <li class="list-group-item bg-danger text-white" id="lnkCustomer"><a class="text-white"
-                                                                             href="/jsonp/pages/customer">Customer</a>
+                                                                             href="/Json_with_Ajax/pages/customer">Customer</a>
         </li>
-        <li class="list-group-item bg-white" id="lnkItem"><a href="/jsonp/pages/item">Item</a></li>
-        <li class="list-group-item bg-white" id="lnkOrders"><a href="purchase-order.jsp">Orders</a></li>
+        <li class="list-group-item bg-white" id="lnkItem"><a href="/Json_with_Ajax/pages/item">Item</a></li>
+        <li class="list-group-item bg-white" id="lnkOrders"><a href="purchase-order.html">Orders</a></li>
     </ul>
 </header>
 
@@ -80,6 +80,7 @@
                     <th>Customer ID</th>
                     <th>Customer Name</th>
                     <th>Customer Address</th>
+                    <th>Customer Salary</th>
                 </tr>
                 </thead>
                 <tbody id="tblCustomer">
@@ -107,19 +108,14 @@
         $("#tblCustomer").empty();
         $.ajax({
             url: 'customer',
-            dataType:"json",
             success: function (resp) {
                 console.log(resp);
 
-                for (let i in resp) {
-                    let id = resp[i].id;
-                    let name = resp[i].name;
-                    let address = resp[i].address;
-                    console.log(id, name, address);
-
-                    let row = `<tr><td>${id}</td><td>${name}</td><td>${address}</td></tr>`;
+                for (const i of resp.data) {
+                    let row = `<tr><td>${i.id}</td><td>${i.name}</td><td>${i.address}</td><td>${i.salary}</td></tr>`;
                     $("#tblCustomer").append(row);
                 }
+                bindClickEvents();
             },
             error: function (error) {
                 console.log(error);
@@ -133,7 +129,7 @@
         console.log(formData);
         $.ajax({
             method: "POST",
-            url: 'customer?option=add',
+            url: 'customer',
             data: formData,
 
             success: function (resp) {
@@ -141,21 +137,21 @@
                 alert(resp.message);
                 getAllCustomers();
             },
-            error:function (error){
-                console.log(error.responseJSON);
-                alert(error.responseJSON.message);
+            error: function (ob,textStatus,error) {
+             alert(textStatus);
+             console.log(ob.responseText);
             }
         })
     })
 
 
     $("#btnCusDelete").click(function () {
-        let formData = $("#customerForm").serialize();
+        let formData = $("#txtCustomerID").val();
         $.ajax({
-            method: "POST",
-            url: 'customer?option=delete',
-            data: formData,
+            method: "DELETE",
+            url: 'customer?cusID=' + formData,
             success: function (resp) {
+                alert("Customer Delete")
                 getAllCustomers();
             }
 
@@ -165,15 +161,34 @@
     $("#btnUpdate").click(function () {
         let formData = $("#customerForm").serialize();
         $.ajax({
-            method: "POST",
-            url: 'customer?option=update',
-            data: formData,
+            method: "PUT",
+            url: 'customer?' + formData,
 
             success: function (resp) {
+                alert("Updated")
+                console.log(resp);
                 getAllCustomers();
+            },
+            error: function (xhr){
+                console.log(xhr);
             }
         });
     });
+
+    function bindClickEvents(){
+        $("#tblCustomer>tr").click( function () {
+            let id = $(this).children().eq(0).text();
+            let name = $(this).children().eq(1).text();
+            let address = $(this).children().eq(2).text();
+            let salary = $(this).children().eq(3).text();
+
+
+            $("#txtCustomerID").val(id);
+            $("#txtCustomerName").val(name);
+            $("#txtCustomerAddress").val(address);
+            $("#txtCustomerSalary").val(salary);
+        });
+    }
 
 
 </script>
