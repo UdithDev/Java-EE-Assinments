@@ -151,8 +151,20 @@
             method: "DELETE",
             url: 'customer?cusID=' + formData,
             success: function (resp) {
-                alert("Customer Delete")
-                getAllCustomers();
+                console.log(resp);
+                if(resp.status==200){
+                    alert(resp.message)
+                    getAllCustomers();
+                }else if (resp.status==400){
+                    alert(resp.message);
+                }else{
+                    alert(resp.message);
+                }
+            },
+            error: function (ob,status, t){
+                console.log(ob);
+                console.log(status);
+                console.log(t);
             }
 
         });
