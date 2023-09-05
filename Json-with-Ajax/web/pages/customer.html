@@ -23,11 +23,11 @@
 <header class="jumbotron bg-primary text-white p-3">
     <h1 class="position-absolute" id="nav"></h1>
     <ul class="list-group list-group-horizontal text-danger justify-content-end font-weight-bold">
-        <li class="list-group-item bg-white" id="lnkHome"><a href="../index.jsp">Home</a></li>
+        <li class="list-group-item bg-white" id="lnkHome"><a href="../index.html">Home</a></li>
         <li class="list-group-item bg-danger text-white" id="lnkCustomer"><a class="text-white"
-                                                                             href="/Json_with_Ajax/pages/customer">Customer</a>
+                                                                             href="/pages/customer">Customer</a>
         </li>
-        <li class="list-group-item bg-white" id="lnkItem"><a href="/Json_with_Ajax/pages/item">Item</a></li>
+        <li class="list-group-item bg-white" id="lnkItem"><a href="item.html">Item</a></li>
         <li class="list-group-item bg-white" id="lnkOrders"><a href="purchase-order.html">Orders</a></li>
     </ul>
 </header>
@@ -137,9 +137,9 @@
                 alert(resp.message);
                 getAllCustomers();
             },
-            error: function (ob,textStatus,error) {
-             alert(textStatus);
-             console.log(ob.responseText);
+            error: function (ob, textStatus, error) {
+                alert(textStatus);
+                console.log(ob.responseText);
             }
         })
     })
@@ -152,16 +152,16 @@
             url: 'customer?cusID=' + formData,
             success: function (resp) {
                 console.log(resp);
-                if(resp.status==200){
+                if (resp.status == 200) {
                     alert(resp.message)
                     getAllCustomers();
-                }else if (resp.status==400){
+                } else if (resp.status == 400) {
                     alert(resp.message);
-                }else{
+                } else {
                     alert(resp.message);
                 }
             },
-            error: function (ob,status, t){
+            error: function (ob, status, t) {
                 console.log(ob);
                 console.log(status);
                 console.log(t);
@@ -171,24 +171,38 @@
     });
 
     $("#btnUpdate").click(function () {
-        let formData = $("#customerForm").serialize();
+
+        let cusOb = {
+            id: $("#txtCustomerID").val(),
+            name: $("#txtCustomerName").val(),
+            address: $("#txtCustomerAddress").val(),
+            salary: $("#txtCustomerSalary").val()
+        }
+
         $.ajax({
             method: "PUT",
-            url: 'customer?' + formData,
+            url: 'customer',
+            contentType: "application/json",
+            data: JSON.stringify(cusOb),
 
             success: function (resp) {
-                alert("Updated")
-                console.log(resp);
-                getAllCustomers();
+               if(resp.status==200){
+                   alert(resp.message);
+                   getAllCustomers();
+               } else if(resp.status==400){
+                   alert(resp.message);
+               } else{
+                   alert(resp.data)
+               }
             },
-            error: function (xhr){
+            error: function (xhr) {
                 console.log(xhr);
             }
         });
     });
 
-    function bindClickEvents(){
-        $("#tblCustomer>tr").click( function () {
+    function bindClickEvents() {
+        $("#tblCustomer>tr").click(function () {
             let id = $(this).children().eq(0).text();
             let name = $(this).children().eq(1).text();
             let address = $(this).children().eq(2).text();

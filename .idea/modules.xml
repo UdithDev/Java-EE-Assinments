@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$USER_HOME$/Pictures/Java-EE-Assignments/Java-EE-Assignments/Json-With-Ajax/Json-With-Ajax.iml" filepath="$USER_HOME$/Pictures/Java-EE-Assignments/Java-EE-Assignments/Json-With-Ajax/Json-With-Ajax.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java-EE-Assinments.iml" filepath="$PROJECT_DIR$/Java-EE-Assinments.iml" />
     </modules>
   </component>
 </project>
